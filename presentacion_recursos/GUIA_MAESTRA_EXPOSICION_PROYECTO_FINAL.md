@@ -53,7 +53,7 @@ flowchart TD
   2. *Bombillas (Fluorescentes/LED)*
   3. *Escombros y Cerámica*
   4. *Madera Procesada*
-  5. *Medicamentos Vencidos*
+  5. *Medicamentos*
   6. *Neumáticos y Gomas*
   7. *Pilas y Baterías*
   8. *RAEE (Residuos de Aparatos Eléctricos y Electrónicos)*

@@ -26,7 +26,7 @@ cells.append(make_cell("markdown", r"""# Momento 3 · Semana 11: Transfer Learni
 
 ---
 ### 1. Contexto del Problema y Objetivos del Experimento
-En el marco del proyecto de impacto regional, el dataset fue ampliado a **19 clases** (9 categorías base de RealWaste + 10 categorías propias de alta criticidad regional como RAEE, Medicamentos Vencidos, Residuos Hospitalarios, Neumáticos y Aceites Usados), superando las 11,500 imágenes normalizadas (180x180 px).
+En el marco del proyecto de impacto regional, el dataset fue ampliado a **19 clases** (9 categorías base de RealWaste + 10 categorías propias de alta criticidad regional como RAEE, Medicamentos, Residuos Hospitalarios, Neumáticos y Aceites Usados), superando las 11,500 imágenes normalizadas (180x180 px).
 
 En esta sesión evaluamos dos paradigmas de Redes Neuronales Convolucionales preentrenadas en **ImageNet**:
 1. **Arquitectura Pesada (Profunda - Bloques Residuales):** `ResNet50` (~23.6M parámetros en backbone).

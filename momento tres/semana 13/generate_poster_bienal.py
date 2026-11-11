@@ -118,7 +118,7 @@ def create_poster(pdf_path):
     # 1. Problema Regional
     col1_content.append(Paragraph("1. PROBLEMA DE IMPACTO REGIONAL", box_title))
     col1_content.append(Paragraph(
-        "En la región, la disposición inadecuada de <b>residuos peligrosos (RAEE, medicamentos vencidos, baterías, aceites químicos)</b> "
+        "En la región, la disposición inadecuada de <b>residuos peligrosos (RAEE, medicamentos, baterías, aceites químicos)</b> "
         "y hospitalarios en rellenos ordinarios genera contaminación de acuíferos y riesgos severos para los recuperadores de oficio. "
         "La falta de conectividad móvil en zonas de recolección impedía el uso de APIs en la nube. "
         "<b>Objetivo:</b> Crear una solución <i>Edge AI</i> que corra de manera autónoma, offline y en tiempo real en smartphones de gama media/baja.",

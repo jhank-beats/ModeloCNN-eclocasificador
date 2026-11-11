@@ -33,7 +33,7 @@ NOMBRES_ESPANOL = {
     'Food_Organics': 'Residuos Orgánicos / Alimentos',
     'Glass': 'Vidrio (Glass)',
     'Madera_Procesada': 'Madera Procesada',
-    'Medicamentos': 'Medicamentos Vencidos',
+    'Medicamentos': 'Medicamentos',
     'Metal': 'Metal',
     'Miscellaneous_Trash': 'Residuos Varios (Trash)',
     'Neumaticos_Gomas': 'Neumáticos y Gomas',
@@ -208,9 +208,9 @@ CANECAS_COLOMBIA = {
         'badge_bg': 'rgba(239, 68, 68, 0.2)',
         'tipo': 'Residuo Peligroso / Farmacéutico',
         'icono': '🔴',
-        'titulo': 'Caneca Roja · Farmacéutico Vencido',
+        'titulo': 'Caneca Roja · Medicamentos y Fármacos',
         'accion': 'Depositar en CANECA ROJA o Contenedor "Punto Azul"',
-        'instrucciones': 'Medicamentos vencidos, tabletas a medio consumir y sus empaques. Depositar en contenedores Punto Azul ubicados en droguerías y EPS. Nunca al inodoro.'
+        'instrucciones': 'Medicamentos, blísteres, tabletas y sus empaques farmacéuticos. Depositar en contenedores Punto Azul ubicados en droguerías y EPS. Nunca al inodoro.'
     },
     'Aceites_Quimicos': {
         'caneca': 'Roja',

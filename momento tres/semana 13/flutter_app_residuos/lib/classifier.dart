@@ -47,7 +47,7 @@ class ClassifierService {
     'Food_Organics': 'Residuos Orgánicos / Alimentos',
     'Glass': 'Vidrio (Glass)',
     'Madera_Procesada': 'Madera Procesada',
-    'Medicamentos': 'Medicamentos Vencidos',
+    'Medicamentos': 'Medicamentos',
     'Metal': 'Metal',
     'Miscellaneous_Trash': 'Residuos Varios (Trash)',
     'Neumaticos_Gomas': 'Neumáticos y Gomas',
@@ -291,11 +291,11 @@ class ClassifierService {
       case 'Medicamentos':
         return {
           "caneca": "Roja",
-          "canecaTitle": "Caneca Roja · Posconsumo Fármacos",
+          "canecaTitle": "Caneca Roja · Medicamentos y Fármacos",
           "canecaIcon": "🔴",
           "canecaColorValue": "0xFFEF4444",
           "category": "Residuo Peligroso / Farmacéutico",
-          "recommendation": "Depositar en CANECA ROJA o Contenedor 'Punto Azul' en droguerías. Medicamentos vencidos o tabletas no consumidas. Nunca arrojarlos al inodoro."
+          "recommendation": "Depositar en CANECA ROJA o Contenedor 'Punto Azul' en droguerías. Medicamentos, blísteres o tabletas y sus empaques. Nunca arrojarlos al inodoro."
         };
       case 'Aceites_Quimicos':
         return {

@@ -210,7 +210,7 @@ add_text(s, Inches(8.15), Inches(1.9), Inches(4.4), Inches(0.4),
          "LAS 10 CLASES PELIGROSAS CRÍTICAS", size=14, color=GREEN, bold=True)
 add_bullets(s, Inches(8.15), Inches(2.4), Inches(4.4), Inches(4.0), [
     ("Bombillas (vapor de mercurio)", 0), ("Aceites y Químicos", 0),
-    ("Pilas y Baterías (Cd, Pb)", 0), ("Medicamentos Vencidos", 0),
+    ("Pilas y Baterías (Cd, Pb)", 0), ("Medicamentos", 0),
     ("Residuos Sanitarios", 0), ("RAEE (electrónicos)", 0),
     ("Escombros y Cerámica", 0), ("Neumáticos y Gomas", 0),
     ("Madera Procesada", 0), ("Tetra Pak", 0),
