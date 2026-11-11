@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>EcoClasificador · Normativa Colombia Res. 2184</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1B5E20;
+      --primary-light: #2E7D32;
+      --accent: #00C853;
+      --bg: #0F172A;
+      --card-bg: rgba(30, 41, 59, 0.85);
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+      --border: rgba(255, 255, 255, 0.1);
+      --danger: #EF4444;
+      --warning: #F59E0B;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Outfit', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .mobile-container {
+      width: 100%;
+      max-width: 490px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Header */
+    .header {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      padding: 16px 20px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+
+    .header-title h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge {
+      font-size: 0.72rem;
+      background: rgba(0, 200, 83, 0.15);
+      color: var(--accent);
+      padding: 3px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 200, 83, 0.3);
+      font-weight: 700;
+    }
+
+    /* Preview Card */
+    .preview-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .image-box {
+      width: 100%;
+      height: 250px;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 18px;
+      border: 2px dashed rgba(255, 255, 255, 0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      transition: border-color 0.2s, background-color 0.2s;
+    }
+
+    .image-box.dragover {
+      border-color: var(--accent);
+      background: rgba(0, 200, 83, 0.1);
+    }
+
+    .image-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background-color: #0b1120;
+      display: none;
+    }
+
+    .placeholder-text {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      text-align: center;
+      padding: 20px;
+      line-height: 1.4;
+    }
+
+    .paste-hint {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 0.78rem;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+      padding: 5px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+    }
+
+    /* Controls */
+    .btn-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .btn {
+      background: #334155;
+      color: #fff;
+      border: none;
+      padding: 13px 10px;
+      border-radius: 16px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      white-space: nowrap;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%);
+      box-shadow: 0 4px 15px rgba(27, 94, 32, 0.4);
+    }
+
+    .btn-paste {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn-paste:hover {
+      background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
+    }
+
+    /* Quick Examples Chips */
+    .quick-examples {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quick-title {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .chips-row {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .chips-row::-webkit-scrollbar { display: none; }
+
+    .chip {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #e2e8f0;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .chip:hover {
+      background: rgba(0, 200, 83, 0.2);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* Metrics & Status */
+    .metrics-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.5);
+      padding: 10px 14px;
+      border-radius: 12px;
+      width: 100%;
+      font-size: 0.8rem;
+    }
+
+    .status-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+    }
+
+    /* Warning Box */
+    .warning-box {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: #FCD34D;
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-size: 0.82rem;
+      display: none;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Results */
+    .results-container {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      display: none;
+    }
+
+    .card-result {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border-radius: 22px;
+      border: 1px solid var(--border);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .top-prediction {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .pred-name {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .pred-conf {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    /* 🇨🇴 CANECA CARD DESTACADA */
+    .caneca-card {
+      border-radius: 18px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.35);
+      border-width: 2px;
+      border-style: solid;
+    }
+
+    .caneca-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+    }
+
+    /* ⚪ Caneca Blanca */
+    .caneca-blanca {
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.15) 0%, rgba(30, 41, 59, 0.95) 100%);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+    .caneca-blanca::before {
+      background: #FFFFFF;
+      box-shadow: 0 0 12px #FFFFFF;
+    }
+    .caneca-blanca .caneca-header-title {
+      color: #FFFFFF;
+    }
+    .caneca-blanca .caneca-icon-box {
+      background: #FFFFFF;
+      color: #0F172A;
+      box-shadow: 0 0 14px rgba(255, 255, 255, 0.5);
+    }
+
+    /* 🟢 Caneca Verde */
+    .caneca-verde {
+      background: linear-gradient(145deg, rgba(16, 185, 129, 0.22) 0%, rgba(30, 41, 59, 0.95) 100%);
+      border-color: #10B981;
+    }
+    .caneca-verde::before {
+      background: #10B981;
+      box-shadow: 0 0 12px #10B981;
+    }
+    .caneca-verde .caneca-header-title {
+      color: #34D399;
+    }
+    .caneca-verde .caneca-icon-box {
+      background: #10B981;
+      color: #FFFFFF;
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.5);
+    }
+
+    /* ⚫ Caneca Negra */
+    .caneca-negra {
+      background: linear-gradient(145deg, rgba(71, 85, 105, 0.3) 0%, rgba(15, 23, 42, 0.95) 100%);
+      border-color: #64748B;
+    }
+    .caneca-negra::before {
+      background: #94A3B8;
+      box-shadow: 0 0 12px #64748B;
+    }
+    .caneca-negra .caneca-header-title {
+      color: #E2E8F0;
+    }
+    .caneca-negra .caneca-icon-box {
+      background: #1E293B;
+      color: #F8FAFC;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    /* 🔴 Caneca Roja */
+    .caneca-roja {
+      background: linear-gradient(145deg, rgba(239, 68, 68, 0.22) 0%, rgba(30, 41, 59, 0.95) 100%);
+      border-color: #EF4444;
+    }
+    .caneca-roja::before {
+      background: #EF4444;
+      box-shadow: 0 0 12px #EF4444;
+    }
+    .caneca-roja .caneca-header-title {
+      color: #F87171;
+    }
+    .caneca-roja .caneca-icon-box {
+      background: #EF4444;
+      color: #FFFFFF;
+      box-shadow: 0 0 14px rgba(239, 68, 68, 0.5);
+    }
+
+    .caneca-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .caneca-icon-box {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .caneca-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .caneca-norma-pill {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: #94A3B8;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 2px 8px;
+      border-radius: 6px;
+      align-self: flex-start;
+    }
+
+    .caneca-header-title {
+      font-size: 1.12rem;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .caneca-action-box {
+      background: rgba(15, 23, 42, 0.65);
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 0.88rem;
+      line-height: 1.45;
+      color: #E2E8F0;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .caneca-action-box strong {
+      color: #FFFFFF;
+    }
+
+    /* Breakdown Top 3 */
+    .breakdown-title {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 6px;
+    }
+
+    .breakdown-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 10px;
+    }
+
+    .breakdown-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+    }
+
+    .caneca-mini-dot {
+      display: inline-block;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+
+    /* Resumen Normativa Colombia (4 Canecas) */
+    .normativa-panel {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .normativa-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .canecas-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .caneca-grid-item {
+      background: rgba(15, 23, 42, 0.55);
+      border-radius: 14px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .caneca-grid-header {
+      font-size: 0.82rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .caneca-grid-desc {
+      font-size: 0.73rem;
+      color: #94A3B8;
+      line-height: 1.35;
+    }
+
+    /* Spinner */
+    .spinner {
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border-left-color: var(--accent);
+      animation: spin 0.8s linear infinite;
+      display: none;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    input[type="file"] { display: none; }
+  </style>
+</head>
+<body>
+  <div class="mobile-container">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-title">
+        <h1>♻️ EcoClasificador</h1>
+        <span class="badge">92.5% Exactitud</span>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+        <div class="status-pill">
+          <span class="status-dot"></span>
+          <span>Normativa Col. 2184</span>
+        </div>
+        <a href="/descargar-apk" download style="text-decoration: none; font-size: 0.72rem; color: #38bdf8; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 8px; font-weight: 700; display: flex; align-items: center; gap: 4px;">
+          ⬇️ Descargar APK Android
+        </a>
+      </div>
+    </div>
+
+    <!-- Main Card -->
+    <div class="preview-card">
+      <div class="image-box" id="imageBox">
+        <img id="imagePreview" alt="Residuo">
+        <div class="placeholder-text" id="placeholder">
+          <p style="font-size: 2.8rem; margin-bottom: 8px;">📸</p>
+          <p>Toma una foto, sube un archivo o pega una imagen del portapapeles.</p>
+          <span class="paste-hint">📋 Presiona <strong>Ctrl + V</strong> en cualquier parte para pegar</span>
+        </div>
+      </div>
+
+      <div class="metrics-bar">
+        <span>Inferencia: <strong id="latencyDisplay">0 ms</strong></span>
+        <span>SLA: <strong style="color: var(--accent);">Óptimo</strong></span>
+        <div class="spinner" id="loadingSpinner"></div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="document.getElementById('cameraInput').click()">
+          📷 Cámara
+        </button>
+        <button class="btn" onclick="document.getElementById('galleryInput').click()">
+          🖼️ Subir Foto
+        </button>
+        <button class="btn btn-paste" onclick="pegarDesdePortapapeles()" id="btnPaste" title="Pegar imagen del portapapeles o presiona Ctrl+V">
+          📋 Pegar Foto
+        </button>
+      </div>
+
+      <!-- Quick Examples Bar -->
+      <div class="quick-examples">
+        <span class="quick-title">⚡ Ejemplos de Prueba Rápida:</span>
+        <div class="chips-row">
+          <button class="chip" onclick="cargarEjemplo('/dataset_completo/Plastic/Plastic_413.jpg')">🧴 Plástico (Blanca)</button>
+          <button class="chip" onclick="cargarEjemplo('/dataset_completo/Cardboard/Cardboard_17.jpg')">📦 Cartón (Blanca)</button>
+          <button class="chip" onclick="cargarEjemplo('/dataset_completo/Glass/Glass_378.jpg')">🍾 Vidrio (Blanca)</button>
+          <button class="chip" onclick="cargarEjemplo('/dataset_completo/Food_Organics/Food Organics_210.jpg')">🍎 Orgánicos (Verde)</button>
+          <button class="chip" onclick="cargarEjemplo('/dataset_completo/Miscellaneous_Trash/Miscellaneous Trash_115.jpg')">🗑️ Basura Varia (Negra)</button>
+          <button class="chip" onclick="cargarEjemplo('/dataset_completo/Pilas_Baterias/000007.jpg')">🔋 Pilas (Roja)</button>
+          <button class="chip" onclick="cargarEjemplo('/dataset_completo/Medicamentos/000004.jpg')">💊 Medicamentos (Roja)</button>
+          <button class="chip" onclick="cargarEjemplo('/dataset_completo/Bombillas/000002.jpg')">💡 Bombillas (Roja)</button>
+        </div>
+      </div>
+
+      <input type="file" id="cameraInput" accept="image/*" capture="environment" onchange="handleFileSelect(event)">
+      <input type="file" id="galleryInput" accept="image/*" onchange="handleFileSelect(event)">
+    </div>
+
+    <!-- Warning Box if Low Confidence -->
+    <div class="warning-box" id="warningBox">
+      <span>⚠️</span>
+      <span id="warningText">Nivel de confianza moderado. Verifique el residuo o acerque la toma.</span>
+    </div>
+
+    <!-- Results Section -->
+    <div class="results-container" id="resultsContainer">
+      <div class="card-result">
+        <div class="top-prediction">
+          <div class="pred-name" id="bestLabel">Plastic</div>
+          <div class="pred-conf" id="bestConf">95.4%</div>
+        </div>
+
+        <!-- 🇨🇴 SECCIÓN CANECA COLOMBIA -->
+        <div class="caneca-card caneca-blanca" id="canecaCard">
+          <div class="caneca-header">
+            <div class="caneca-icon-box" id="canecaIconBox">🗑️</div>
+            <div class="caneca-meta">
+              <span class="caneca-norma-pill">🇨🇴 Normativa Colombia · Res. 2184/2019</span>
+              <div class="caneca-header-title" id="canecaTitle">Caneca Blanca · Aprovechables</div>
+            </div>
+          </div>
+          <div class="caneca-action-box" id="canecaActionText">
+            <strong>Instrucciones de disposición:</strong> Depositar limpio, seco y aplastado.
+          </div>
+        </div>
+
+        <div class="breakdown-title">Distribución Top-3 Probabilidades Calibradas:</div>
+        <div id="breakdownList"></div>
+      </div>
+    </div>
+
+    <!-- Guía Resumida del Código de Colores Colombia -->
+    <div class="normativa-panel">
+      <div class="normativa-title">
+        <span>🇨🇴 Código de Colores Nacional (Resolución 2184 de 2019)</span>
+      </div>
+      <div class="canecas-grid">
+        <div class="caneca-grid-item" style="border-left: 3px solid #FFFFFF;">
+          <div class="caneca-grid-header" style="color: #FFFFFF;">
+            <span>⚪ Caneca Blanca</span>
+          </div>
+          <div class="caneca-grid-desc">
+            Aprovechables: Plástico, cartón, vidrio, papel, metales y tetra pak limpios y secos.
+          </div>
+        </div>
+
+        <div class="caneca-grid-item" style="border-left: 3px solid #10B981;">
+          <div class="caneca-grid-header" style="color: #34D399;">
+            <span>🟢 Caneca Verde</span>
+          </div>
+          <div class="caneca-grid-desc">
+            Orgánicos aprovechables: Restos de comida, cáscaras, desechos agrícolas y poda de jardín.
+          </div>
+        </div>
+
+        <div class="caneca-grid-item" style="border-left: 3px solid #94A3B8;">
+          <div class="caneca-grid-header" style="color: #CBD5E1;">
+            <span>⚫ Caneca Negra</span>
+          </div>
+          <div class="caneca-grid-desc">
+            No aprovechables: Papel higiénico, servilletas usadas, cartón grasiento y residuos comunes.
+          </div>
+        </div>
+
+        <div class="caneca-grid-item" style="border-left: 3px solid #EF4444;">
+          <div class="caneca-grid-header" style="color: #F87171;">
+            <span>🔴 Caneca Roja / RESPEL</span>
+          </div>
+          <div class="caneca-grid-desc">
+            Peligrosos y Posconsumo: Pilas, medicamentos, aceites, bombillas, RAEE y biológicos.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        mostrarImagen(e.target.result);
+        enviarAlModelo(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // 📋 Función para pegar desde el portapapeles
+    async function pegarDesdePortapapeles() {
+      try {
+        if (navigator.clipboard && navigator.clipboard.read) {
+          const items = await navigator.clipboard.read();
+          for (const item of items) {
+            for (const type of item.types) {
+              if (type.startsWith('image/')) {
+                const blob = await item.getType(type);
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                  mostrarImagen(evt.target.result);
+                  enviarAlModelo(evt.target.result);
+                };
+                reader.readAsDataURL(blob);
+                return;
+              }
+            }
+          }
+          alert('No se encontró ninguna imagen en el portapapeles. Copia una imagen primero (Ctrl + C o captura de pantalla) y presiona "Pegar Foto" o Ctrl + V.');
+        } else {
+          alert('Presiona directamente Ctrl + V en tu teclado para pegar la imagen copiada.');
+        }
+      } catch (err) {
+        console.warn('Acceso al portapapeles requiere interacción o Ctrl+V:', err);
+        alert('Para pegar la imagen copiada, simplemente presiona Ctrl + V en tu teclado.');
+      }
+    }
+
+    // ⌨️ Event listener global para pegar con Ctrl + V
+    window.addEventListener('paste', function(e) {
+      const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+      if (!items) return;
+
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') !== -1) {
+          const blob = items[i].getAsFile();
+          if (blob) {
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+              mostrarImagen(evt.target.result);
+              enviarAlModelo(evt.target.result);
+            };
+            reader.readAsDataURL(blob);
+            e.preventDefault();
+            break;
+          }
+        }
+      }
+    });
+
+    // 🖱️ Arrastrar y soltar imagen (Drag & Drop)
+    const imageBox = document.getElementById('imageBox');
+    ['dragenter', 'dragover'].forEach(eventName => {
+      imageBox.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        imageBox.classList.add('dragover');
+      }, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      imageBox.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        imageBox.classList.remove('dragover');
+      }, false);
+    });
+
+    imageBox.addEventListener('drop', (e) => {
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      if (files && files.length > 0 && files[0].type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          mostrarImagen(evt.target.result);
+          enviarAlModelo(evt.target.result);
+        };
+        reader.readAsDataURL(files[0]);
+      }
+    }, false);
+
+    function cargarEjemplo(url) {
+      mostrarImagen(url);
+      fetch(url)
+        .then(res => res.blob())
+        .then(blob => {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            enviarAlModelo(e.target.result);
+          };
+          reader.readAsDataURL(blob);
+        });
+    }
+
+    function mostrarImagen(src) {
+      const imgEl = document.getElementById('imagePreview');
+      imgEl.src = src;
+      imgEl.style.display = 'block';
+      document.getElementById('placeholder').style.display = 'none';
+    }
+
+    function enviarAlModelo(base64Image) {
+      const spinner = document.getElementById('loadingSpinner');
+      spinner.style.display = 'inline-block';
+
+      fetch('/api/clasificar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          image: base64Image,
+          usar_tta: true,
+          temperatura: 0.75
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        spinner.style.display = 'none';
+        if (data.success && data.predictions) {
+          document.getElementById('latencyDisplay').innerText = `${data.latency_ms} ms`;
+          renderResults(data.predictions);
+        } else {
+          alert('Error en clasificación: ' + (data.error || 'Desconocido'));
+        }
+      })
+      .catch(err => {
+        spinner.style.display = 'none';
+        console.error(err);
+        alert('Error conectando con el servidor de inferencia');
+      });
+    }
+
+    function renderResults(predictions) {
+      document.getElementById('resultsContainer').style.display = 'flex';
+      const best = predictions[0];
+      const isLow = best.conf < 0.40;
+
+      const warningBox = document.getElementById('warningBox');
+      if (isLow) {
+        warningBox.style.display = 'flex';
+        document.getElementById('warningText').innerText = 
+          `Nivel de confianza moderado (${(best.conf * 100).toFixed(1)}%). Verifique el residuo o acerque la toma.`;
+      } else {
+        warningBox.style.display = 'none';
+      }
+
+      // Nombre y Confianza
+      document.getElementById('bestLabel').innerText = best.label_es || best.label.replace(/_/g, " ");
+      document.getElementById('bestConf').innerText = `${(best.conf * 100).toFixed(1)}%`;
+
+      // 🇨🇴 Actualizar Sugerencia de Caneca según Normativa Colombia
+      const canecaInfo = best.caneca || {
+        caneca: "Negra",
+        titulo: "Caneca Negra · Residuos No Aprovechables",
+        accion: "Depositar en CANECA NEGRA",
+        instrucciones: "Disponer en recolección ordinaria de residuos no aprovechables."
+      };
+
+      const canecaCard = document.getElementById('canecaCard');
+      const canecaIconBox = document.getElementById('canecaIconBox');
+      const canecaTitle = document.getElementById('canecaTitle');
+      const canecaActionText = document.getElementById('canecaActionText');
+
+      // Limpiar clases de color
+      canecaCard.className = 'caneca-card';
+      const colorNombre = (canecaInfo.caneca || 'Negra').toLowerCase();
+
+      if (colorNombre === 'blanca') {
+        canecaCard.classList.add('caneca-blanca');
+        canecaIconBox.innerText = '⚪';
+      } else if (colorNombre === 'verde') {
+        canecaCard.classList.add('caneca-verde');
+        canecaIconBox.innerText = '🟢';
+      } else if (colorNombre === 'roja') {
+        canecaCard.classList.add('caneca-roja');
+        canecaIconBox.innerText = '🔴';
+      } else {
+        canecaCard.classList.add('caneca-negra');
+        canecaIconBox.innerText = '⚫';
+      }
+
+      canecaTitle.innerText = canecaInfo.titulo || `Caneca ${canecaInfo.caneca}`;
+      canecaActionText.innerHTML = `<strong>Sugerencia de Disposición:</strong> ${canecaInfo.instrucciones}`;
+
+      // Render Top 3 Probabilidades
+      const listEl = document.getElementById('breakdownList');
+      listEl.innerHTML = '';
+      predictions.slice(0, 3).forEach(item => {
+        const pct = (item.conf * 100).toFixed(1);
+        const itemCaneca = (item.caneca && item.caneca.caneca) ? item.caneca.caneca.toLowerCase() : 'negra';
+        let dotColor = '#64748B';
+        if (itemCaneca === 'blanca') dotColor = '#FFFFFF';
+        if (itemCaneca === 'verde') dotColor = '#10B981';
+        if (itemCaneca === 'roja') dotColor = '#EF4444';
+
+        listEl.innerHTML += `
+          <div class="breakdown-row">
+            <div class="breakdown-info">
+              <span>
+                <span class="caneca-mini-dot" style="background: ${dotColor}; box-shadow: 0 0 6px ${dotColor};"></span>
+                ${item.label_es || item.label.replace(/_/g, " ")}
+                <small style="color: #94A3B8; font-size: 0.72rem;">(Caneca ${item.caneca ? item.caneca.caneca : ''})</small>
+              </span>
+              <strong>${pct}%</strong>
+            </div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" style="width: ${pct}%; background: ${dotColor};"></div>
+            </div>
+          </div>
+        `;
+      });
+    }
+  </script>
+</body>
+</html>

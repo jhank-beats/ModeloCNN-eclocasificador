@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.pyc
+dataset_completo/
+dataset_suplementario/
+dataset_suplementario_descartes/
+realwaste-main/
+momento_1_y_2_base/dataset_*/
+momento_1_y_2_base/resultados_optimizacion_90/*.keras
+momento_1_y_2_base/resultados_optimizacion_90/*.h5
+**/build/
+**/.dart_tool/
+**/.gradle/
+*.apk
+*.keras
+*.h5

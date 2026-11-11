@@ -1,0 +1,35 @@
+{
+  "arquitectura": "EfficientNetV2-B0",
+  "resolucion": [
+    180,
+    180
+  ],
+  "canales": 3,
+  "num_clases": 19,
+  "clases": [
+    "Aceites_Quimicos",
+    "Bombillas",
+    "Cardboard",
+    "Escombros_Ceramica",
+    "Food_Organics",
+    "Glass",
+    "Madera_Procesada",
+    "Medicamentos",
+    "Metal",
+    "Miscellaneous_Trash",
+    "Neumaticos_Gomas",
+    "Paper",
+    "Pilas_Baterias",
+    "Plastic",
+    "RAEE_Electronicos",
+    "Residuos_Sanitarios",
+    "Tetra_Pack",
+    "Textile_Trash",
+    "Vegetation"
+  ],
+  "baseline_cuaderno2_acc": 0.7088,
+  "test_accuracy_estandar": 0.8301,
+  "test_accuracy_tta": 0.8266,
+  "f1_macro_tta": 0.8238,
+  "fecha_optimizacion": "2026-10-31 19:46:38"
+}

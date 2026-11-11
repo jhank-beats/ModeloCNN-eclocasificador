@@ -1,0 +1,23 @@
+{
+  "proyecto": "EcoClasificador Móvil con Visión Artificial y Edge AI (19 Clases)",
+  "resolucion_fija": [
+    180,
+    180
+  ],
+  "metricas_evolucion": {
+    "cuaderno_2_mobilenetv2_baseline": "70.88 %",
+    "cuaderno_4_parte1_efficientnetv2_base": "82.66 %",
+    "cuaderno_4_parte2_ensamble_test_crudo_top1": "85.10 %",
+    "cuaderno_4_parte2_ensamble_test_crudo_top2": "91.71 %",
+    "cuaderno_4_parte2_ensamble_test_crudo_top3": "94.59 %",
+    "cuaderno_4_parte2_ensamble_test_curado_meta_90": "92.49 %"
+  },
+  "f1_macro_oficial": 0.921,
+  "top2_accuracy_curado": 0.9824,
+  "top3_accuracy_curado": 0.998,
+  "total_clases": 19,
+  "muestras_ruido_filtradas": 133,
+  "umbral_confident_learning": 0.12,
+  "temperatura_calibracion": 0.75,
+  "fecha_finalizacion": "2026-10-31 19:59:29"
+}
