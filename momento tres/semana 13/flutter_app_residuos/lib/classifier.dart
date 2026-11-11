@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math' as math;
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
@@ -128,11 +129,32 @@ class ClassifierService {
     stopwatch.stop();
     final latencyMs = stopwatch.elapsedMilliseconds;
 
-    // 6. Extraer probabilidades y ordenar Top-3
+    // 6. Extraer probabilidades, aplicar calibración de dominio y temperatura (T=0.55)
+    const List<double> priorBoost = [
+      0.72, 0.72, 1.35, 0.88, 1.35, 1.85, 0.78, 0.78, 1.25, 1.75,
+      0.78, 1.40, 0.85, 2.10, 0.78, 0.72, 0.72, 1.70, 1.30
+    ];
     final List<double> rawScores = List<double>.from(outputTensor[0]);
-    List<MapEntry<int, double>> scoredIndices = [];
+    final List<double> logProbs = [];
+    double maxLog = -1e9;
     for (int i = 0; i < rawScores.length; i++) {
-      scoredIndices.add(MapEntry(i, rawScores[i]));
+      final double boost = (i < priorBoost.length) ? priorBoost[i] : 1.0;
+      final double p = (rawScores[i] * boost).clamp(1e-7, 1.0 - 1e-7);
+      final double lp = math.log(p) / 0.55;
+      logProbs.add(lp);
+      if (lp > maxLog) maxLog = lp;
+    }
+    double sumExp = 0.0;
+    final List<double> calibratedScores = [];
+    for (final lp in logProbs) {
+      final double e = math.exp(lp - maxLog);
+      calibratedScores.add(e);
+      sumExp += e;
+    }
+
+    List<MapEntry<int, double>> scoredIndices = [];
+    for (int i = 0; i < calibratedScores.length; i++) {
+      scoredIndices.add(MapEntry(i, calibratedScores[i] / sumExp));
     }
     scoredIndices.sort((a, b) => b.value.compareTo(a.value));
 

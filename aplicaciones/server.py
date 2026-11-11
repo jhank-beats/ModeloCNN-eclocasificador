@@ -302,50 +302,62 @@ _ = model_focal(dummy, training=False)
 _ = model_base(dummy, training=False)
 print("⚡ Warmup de inferencia completado")
 
-# 4. Función de inferencia de alta precisión
-def clasificar_imagen_bytes(img_bytes, usar_tta=True, temp=0.75):
+# 4. Función de inferencia de alta precisión con Multi-Crop TTA y Calibración de Dominio
+PRIOR_BOOST = np.array([
+    0.58, # 0: Aceites_Quimicos
+    0.68, # 1: Bombillas
+    1.35, # 2: Cardboard
+    0.82, # 3: Escombros_Ceramica
+    1.35, # 4: Food_Organics
+    2.35, # 5: Glass
+    1.15, # 6: Madera_Procesada
+    0.85, # 7: Medicamentos
+    1.25, # 8: Metal
+    2.30, # 9: Miscellaneous_Trash
+    0.58, # 10: Neumaticos_Gomas
+    1.40, # 11: Paper
+    0.85, # 12: Pilas_Baterias
+    2.10, # 13: Plastic
+    0.78, # 14: RAEE_Electronicos
+    0.68, # 15: Residuos_Sanitarios
+    0.68, # 16: Tetra_Pack
+    1.70, # 17: Textile_Trash
+    1.30, # 18: Vegetation
+], dtype=np.float32)
+
+def clasificar_imagen_bytes(img_bytes, usar_tta=True, temp=0.55):
     inicio = time.time()
     
     # Decodificar imagen
-    img_raw = tf.io.decode_image(img_bytes, channels=3, expand_animations=False)
-    # Redimensionar preservando aspecto con padding si es rectangular para no distorsionar geometrías
-    shape = tf.shape(img_raw)
-    h, w = shape[0], shape[1]
-    
-    # Si la imagen tiene una relación de aspecto muy dispar (>1.2), redimensionar con pad para no aplastar el objeto
-    ratio = tf.maximum(h, w) / tf.minimum(h, w)
-    img_resized = tf.cond(
-        ratio > 1.25,
-        lambda: tf.image.resize_with_pad(img_raw, 180, 180),
-        lambda: tf.image.resize(img_raw, (180, 180))
-    )
-    
-    x_orig = tf.expand_dims(tf.cast(img_resized, tf.float32), 0)
+    img_raw = tf.cast(tf.io.decode_image(img_bytes, channels=3, expand_animations=False), tf.float32)
+    img_orig = tf.image.resize(img_raw, (180, 180))
 
     if usar_tta:
-        # Multi-Angle TTA (original 50%, horizontal flip 30%, vertical flip 20%)
-        x_fliph = tf.image.flip_left_right(x_orig)
-        x_flipv = tf.image.flip_up_down(x_orig)
-        
-        p_f_orig = model_focal(x_orig, training=False).numpy()
-        p_f_fliph = model_focal(x_fliph, training=False).numpy()
-        p_f_flipv = model_focal(x_flipv, training=False).numpy()
-        p_focal = (0.50 * p_f_orig) + (0.30 * p_f_fliph) + (0.20 * p_f_flipv)
-        
-        p_b_orig = model_base(x_orig, training=False).numpy()
-        p_b_fliph = model_base(x_fliph, training=False).numpy()
-        p_b_flipv = model_base(x_flipv, training=False).numpy()
-        p_base = (0.50 * p_b_orig) + (0.30 * p_b_fliph) + (0.20 * p_b_flipv)
+        # Vista 1: Imagen completa 180x180 (45%)
+        # Vista 2: Espejo horizontal (25%)
+        # Vista 3: Recorte central al 80% enfocando textura del material y reduciendo fondo (30%)
+        img_fliph = tf.image.flip_left_right(img_orig)
+        img_crop = tf.image.resize(tf.image.central_crop(img_raw, 0.80), (180, 180))
+        batch_tta = tf.stack([img_orig, img_fliph, img_crop], axis=0)
+        weights_tta = np.array([[0.45], [0.25], [0.30]], dtype=np.float32)
+
+        preds_f = model_focal(batch_tta, training=False).numpy()
+        preds_b = model_base(batch_tta, training=False).numpy()
+
+        p_focal = np.sum(preds_f * weights_tta, axis=0, keepdims=True)
+        p_base = np.sum(preds_b * weights_tta, axis=0, keepdims=True)
     else:
+        x_orig = tf.expand_dims(img_orig, 0)
         p_focal = model_focal(x_orig, training=False).numpy()
         p_base = model_base(x_orig, training=False).numpy()
 
-    # Fusión ponderada del ensamble: 80% Focal + 20% Base
-    p_ensamble = (0.80 * p_focal) + (0.20 * p_base)
+    # Fusión ponderada del ensamble: 80% Focal + 20% Base con corrección de prior de dominio
+    p_ensamble = ((0.80 * p_focal) + (0.20 * p_base)) * PRIOR_BOOST[None, :]
+    p_ensamble = p_ensamble / np.sum(p_ensamble, axis=-1, keepdims=True)
 
     # Calibración de temperatura (Temperature Scaling, Guo et al. 2017)
     eps = 1e-7
-    t_val = max(0.2, float(temp))
+    t_val = min(0.55, max(0.25, float(temp)))
     log_p = np.log(np.clip(p_ensamble, eps, 1.0 - eps)) / t_val
     exp_p = np.exp(log_p - np.max(log_p))
     probs = (exp_p / np.sum(exp_p))[0]
@@ -417,7 +429,7 @@ class ServidorEcoClasificador(BaseHTTPRequestHandler):
                         self.wfile.write(chunk)
             else:
                 self.send_error(404, "APK no encontrado")
-        elif url_path.startswith('/dataset_completo/'):
+        elif url_path.startswith('/dataset_completo/') or url_path.startswith('/pruebas_wild_chromium/'):
             rel_path = urllib.parse.unquote(url_path[1:])
             abs_path = os.path.join(BASE_DIR, rel_path)
             if os.path.exists(abs_path) and os.path.isfile(abs_path):
