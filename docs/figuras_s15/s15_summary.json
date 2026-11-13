@@ -1,0 +1,513 @@
+{
+  "seeds": {
+    "42": {
+      "acc": 92.63,
+      "prec_macro": 92.73,
+      "rec_macro": 92.63,
+      "f1_macro": 92.63
+    },
+    "101": {
+      "acc": 93.33,
+      "prec_macro": 93.44,
+      "rec_macro": 93.33,
+      "f1_macro": 93.33
+    },
+    "2026": {
+      "acc": 93.86,
+      "prec_macro": 94.13,
+      "rec_macro": 93.86,
+      "f1_macro": 93.88
+    }
+  },
+  "mean_acc_3seeds": 93.27,
+  "std_acc_3seeds": 0.5,
+  "mean_f1_3seeds": 93.28,
+  "std_f1_3seeds": 0.51,
+  "clases": [
+    {
+      "Clase": "Aceites_Quimicos",
+      "Caneca_Col": "Roja (RESPEL)",
+      "Precision": 0.8928571428571429,
+      "Recall": 0.8333333333333334,
+      "F1_Seed42": 0.8620689655172413,
+      "F1_Media_3Semillas": 0.8345996493278784,
+      "F1_Std_3Semillas": 0.03884747950411186,
+      "Soporte": 30
+    },
+    {
+      "Clase": "Neumaticos_Gomas",
+      "Caneca_Col": "Roja / Posconsumo",
+      "Precision": 0.8064516129032258,
+      "Recall": 0.8333333333333334,
+      "F1_Seed42": 0.819672131147541,
+      "F1_Media_3Semillas": 0.8775382480300512,
+      "F1_Std_3Semillas": 0.04252037612306982,
+      "Soporte": 30
+    },
+    {
+      "Clase": "Escombros_Ceramica",
+      "Caneca_Col": "Especial / Escombrera",
+      "Precision": 0.896551724137931,
+      "Recall": 0.8666666666666667,
+      "F1_Seed42": 0.8813559322033898,
+      "F1_Media_3Semillas": 0.8890234059725586,
+      "F1_Std_3Semillas": 0.0489024642577953,
+      "Soporte": 30
+    },
+    {
+      "Clase": "RAEE_Electronicos",
+      "Caneca_Col": "Roja / Posconsumo",
+      "Precision": 0.8620689655172413,
+      "Recall": 0.8333333333333334,
+      "F1_Seed42": 0.847457627118644,
+      "F1_Media_3Semillas": 0.8906730102091386,
+      "F1_Std_3Semillas": 0.030557890434863184,
+      "Soporte": 30
+    },
+    {
+      "Clase": "Plastic",
+      "Caneca_Col": "Blanca (Aprovechable)",
+      "Precision": 0.9032258064516129,
+      "Recall": 0.9333333333333333,
+      "F1_Seed42": 0.9180327868852459,
+      "F1_Media_3Semillas": 0.8941335343257334,
+      "F1_Std_3Semillas": 0.043318659216193864,
+      "Soporte": 30
+    },
+    {
+      "Clase": "Bombillas",
+      "Caneca_Col": "Roja (RESPEL)",
+      "Precision": 0.8709677419354839,
+      "Recall": 0.9,
+      "F1_Seed42": 0.8852459016393442,
+      "F1_Media_3Semillas": 0.907103825136612,
+      "F1_Std_3Semillas": 0.015455885927574825,
+      "Soporte": 30
+    },
+    {
+      "Clase": "Residuos_Sanitarios",
+      "Caneca_Col": "Negra / Roja Biosanitario",
+      "Precision": 0.9655172413793104,
+      "Recall": 0.9333333333333333,
+      "F1_Seed42": 0.9491525423728814,
+      "F1_Media_3Semillas": 0.9161804204871724,
+      "F1_Std_3Semillas": 0.02770882571279454,
+      "Soporte": 30
+    },
+    {
+      "Clase": "Glass",
+      "Caneca_Col": "Blanca (Aprovechable)",
+      "Precision": 0.90625,
+      "Recall": 0.9666666666666667,
+      "F1_Seed42": 0.9354838709677419,
+      "F1_Media_3Semillas": 0.9291321464245842,
+      "F1_Std_3Semillas": 0.03354194933624387,
+      "Soporte": 30
+    },
+    {
+      "Clase": "Pilas_Baterias",
+      "Caneca_Col": "Roja (RESPEL)",
+      "Precision": 0.9032258064516129,
+      "Recall": 0.9333333333333333,
+      "F1_Seed42": 0.9180327868852459,
+      "F1_Media_3Semillas": 0.9329115137570702,
+      "F1_Std_3Semillas": 0.011979936193955277,
+      "Soporte": 30
+    },
+    {
+      "Clase": "Paper",
+      "Caneca_Col": "Blanca (Aprovechable)",
+      "Precision": 0.9655172413793104,
+      "Recall": 0.9333333333333333,
+      "F1_Seed42": 0.9491525423728814,
+      "F1_Media_3Semillas": 0.9442341902124792,
+      "F1_Std_3Semillas": 0.0196949400545761,
+      "Soporte": 30
+    },
+    {
+      "Clase": "Medicamentos",
+      "Caneca_Col": "Roja (RESPEL)",
+      "Precision": 0.9642857142857143,
+      "Recall": 0.9,
+      "F1_Seed42": 0.9310344827586207,
+      "F1_Media_3Semillas": 0.9457614942528735,
+      "F1_Std_3Semillas": 0.039664671734125426,
+      "Soporte": 30
+    },
+    {
+      "Clase": "Metal",
+      "Caneca_Col": "Blanca (Aprovechable)",
+      "Precision": 0.8787878787878788,
+      "Recall": 0.9666666666666667,
+      "F1_Seed42": 0.9206349206349206,
+      "F1_Media_3Semillas": 0.9512980324993673,
+      "F1_Std_3Semillas": 0.021701108080363046,
+      "Soporte": 30
+    },
+    {
+      "Clase": "Madera_Procesada",
+      "Caneca_Col": "Negra / Especial",
+      "Precision": 0.9333333333333333,
+      "Recall": 0.9333333333333333,
+      "F1_Seed42": 0.9333333333333333,
+      "F1_Media_3Semillas": 0.9610169491525423,
+      "F1_Std_3Semillas": 0.020686505805587223,
+      "Soporte": 30
+    },
+    {
+      "Clase": "Cardboard",
+      "Caneca_Col": "Blanca (Aprovechable)",
+      "Precision": 0.9354838709677419,
+      "Recall": 0.9666666666666667,
+      "F1_Seed42": 0.9508196721311475,
+      "F1_Media_3Semillas": 0.9615633972399741,
+      "F1_Std_3Semillas": 0.015193921759310875,
+      "Soporte": 30
+    },
+    {
+      "Clase": "Miscellaneous_Trash",
+      "Caneca_Col": "Negra (No Aprovechable)",
+      "Precision": 1.0,
+      "Recall": 1.0,
+      "F1_Seed42": 1.0,
+      "F1_Media_3Semillas": 0.9719397363465161,
+      "F1_Std_3Semillas": 0.02109059718882352,
+      "Soporte": 30
+    },
+    {
+      "Clase": "Textile_Trash",
+      "Caneca_Col": "Negra (No Aprovechable)",
+      "Precision": 0.9655172413793104,
+      "Recall": 0.9333333333333333,
+      "F1_Seed42": 0.9491525423728814,
+      "F1_Media_3Semillas": 0.9774011299435029,
+      "F1_Std_3Semillas": 0.021139307269909268,
+      "Soporte": 30
+    },
+    {
+      "Clase": "Tetra_Pack",
+      "Caneca_Col": "Blanca (Aprovechable)",
+      "Precision": 0.967741935483871,
+      "Recall": 1.0,
+      "F1_Seed42": 0.9836065573770492,
+      "F1_Media_3Semillas": 0.9775767853778029,
+      "F1_Std_3Semillas": 0.00852738533935159,
+      "Soporte": 30
+    },
+    {
+      "Clase": "Food_Organics",
+      "Caneca_Col": "Verde (Orgánico)",
+      "Precision": 1.0,
+      "Recall": 1.0,
+      "F1_Seed42": 1.0,
+      "F1_Media_3Semillas": 0.9777530589543938,
+      "F1_Std_3Semillas": 0.0157571593332412,
+      "Soporte": 30
+    },
+    {
+      "Clase": "Vegetation",
+      "Caneca_Col": "Verde (Orgánico)",
+      "Precision": 1.0,
+      "Recall": 0.9333333333333333,
+      "F1_Seed42": 0.9655172413793104,
+      "F1_Media_3Semillas": 0.98304126625212,
+      "F1_Std_3Semillas": 0.014083201010781813,
+      "Soporte": 30
+    }
+  ],
+  "pares_confundidos": [
+    {
+      "Clase_Real": "Aceites_Quimicos",
+      "Caneca_Real": "Roja (RESPEL)",
+      "Clase_Predicha": "Neumaticos_Gomas",
+      "Caneca_Predicha": "Roja / Posconsumo",
+      "Errores_Acumulados_3Semillas": 5,
+      "Cambio_Critico_Caneca": "SÍ"
+    },
+    {
+      "Clase_Real": "Escombros_Ceramica",
+      "Caneca_Real": "Especial / Escombrera",
+      "Clase_Predicha": "Neumaticos_Gomas",
+      "Caneca_Predicha": "Roja / Posconsumo",
+      "Errores_Acumulados_3Semillas": 5,
+      "Cambio_Critico_Caneca": "SÍ"
+    },
+    {
+      "Clase_Real": "RAEE_Electronicos",
+      "Caneca_Real": "Roja / Posconsumo",
+      "Clase_Predicha": "Neumaticos_Gomas",
+      "Caneca_Predicha": "Roja / Posconsumo",
+      "Errores_Acumulados_3Semillas": 4,
+      "Cambio_Critico_Caneca": "NO"
+    },
+    {
+      "Clase_Real": "Glass",
+      "Caneca_Real": "Blanca (Aprovechable)",
+      "Clase_Predicha": "Plastic",
+      "Caneca_Predicha": "Blanca (Aprovechable)",
+      "Errores_Acumulados_3Semillas": 3,
+      "Cambio_Critico_Caneca": "NO"
+    },
+    {
+      "Clase_Real": "Escombros_Ceramica",
+      "Caneca_Real": "Especial / Escombrera",
+      "Clase_Predicha": "RAEE_Electronicos",
+      "Caneca_Predicha": "Roja / Posconsumo",
+      "Errores_Acumulados_3Semillas": 3,
+      "Cambio_Critico_Caneca": "SÍ"
+    },
+    {
+      "Clase_Real": "Aceites_Quimicos",
+      "Caneca_Real": "Roja (RESPEL)",
+      "Clase_Predicha": "Residuos_Sanitarios",
+      "Caneca_Predicha": "Negra / Roja Biosanitario",
+      "Errores_Acumulados_3Semillas": 3,
+      "Cambio_Critico_Caneca": "SÍ"
+    },
+    {
+      "Clase_Real": "Neumaticos_Gomas",
+      "Caneca_Real": "Roja / Posconsumo",
+      "Clase_Predicha": "Bombillas",
+      "Caneca_Predicha": "Roja (RESPEL)",
+      "Errores_Acumulados_3Semillas": 3,
+      "Cambio_Critico_Caneca": "SÍ"
+    },
+    {
+      "Clase_Real": "Pilas_Baterias",
+      "Caneca_Real": "Roja (RESPEL)",
+      "Clase_Predicha": "Aceites_Quimicos",
+      "Caneca_Predicha": "Roja (RESPEL)",
+      "Errores_Acumulados_3Semillas": 3,
+      "Cambio_Critico_Caneca": "NO"
+    },
+    {
+      "Clase_Real": "Plastic",
+      "Caneca_Real": "Blanca (Aprovechable)",
+      "Clase_Predicha": "Metal",
+      "Caneca_Predicha": "Blanca (Aprovechable)",
+      "Errores_Acumulados_3Semillas": 3,
+      "Cambio_Critico_Caneca": "NO"
+    },
+    {
+      "Clase_Real": "Plastic",
+      "Caneca_Real": "Blanca (Aprovechable)",
+      "Clase_Predicha": "Glass",
+      "Caneca_Predicha": "Blanca (Aprovechable)",
+      "Errores_Acumulados_3Semillas": 3,
+      "Cambio_Critico_Caneca": "NO"
+    }
+  ],
+  "umbral_optimo": {
+    "Umbral": 0.72,
+    "Cobertura_Aceptada_%": 74.73684210526315,
+    "Tasa_No_Estoy_Seguro_%": 25.26315789473685,
+    "Accuracy_Aceptadas_%": 99.06103286384976,
+    "F1_Aceptadas_%": 99.03335434093788,
+    "Error_Residual_Global_%": 0.7017543859649122
+  },
+  "umbral_tabla": [
+    {
+      "Umbral": 0.3,
+      "Cobertura_Aceptada_%": 97.89473684210527,
+      "Tasa_No_Estoy_Seguro_%": 2.1052631578947256,
+      "Accuracy_Aceptadas_%": 94.08602150537635,
+      "F1_Aceptadas_%": 94.07013580575612,
+      "Error_Residual_Global_%": 5.7894736842105265
+    },
+    {
+      "Umbral": 0.38,
+      "Cobertura_Aceptada_%": 95.96491228070175,
+      "Tasa_No_Estoy_Seguro_%": 4.035087719298247,
+      "Accuracy_Aceptadas_%": 95.24680073126143,
+      "F1_Aceptadas_%": 95.16094022535029,
+      "Error_Residual_Global_%": 4.56140350877193
+    },
+    {
+      "Umbral": 0.45,
+      "Cobertura_Aceptada_%": 92.80701754385964,
+      "Tasa_No_Estoy_Seguro_%": 7.192982456140356,
+      "Accuracy_Aceptadas_%": 96.21928166351607,
+      "F1_Aceptadas_%": 96.06748682286612,
+      "Error_Residual_Global_%": 3.508771929824561
+    },
+    {
+      "Umbral": 0.52,
+      "Cobertura_Aceptada_%": 88.59649122807018,
+      "Tasa_No_Estoy_Seguro_%": 11.403508771929822,
+      "Accuracy_Aceptadas_%": 98.01980198019803,
+      "F1_Aceptadas_%": 97.8939703499486,
+      "Error_Residual_Global_%": 1.7543859649122806
+    },
+    {
+      "Umbral": 0.6,
+      "Cobertura_Aceptada_%": 84.21052631578947,
+      "Tasa_No_Estoy_Seguro_%": 15.789473684210535,
+      "Accuracy_Aceptadas_%": 98.54166666666667,
+      "F1_Aceptadas_%": 98.46302594543465,
+      "Error_Residual_Global_%": 1.2280701754385965
+    },
+    {
+      "Umbral": 0.67,
+      "Cobertura_Aceptada_%": 80.0,
+      "Tasa_No_Estoy_Seguro_%": 20.0,
+      "Accuracy_Aceptadas_%": 98.90350877192982,
+      "F1_Aceptadas_%": 98.87890719673423,
+      "Error_Residual_Global_%": 0.8771929824561403
+    },
+    {
+      "Umbral": 0.75,
+      "Cobertura_Aceptada_%": 70.87719298245614,
+      "Tasa_No_Estoy_Seguro_%": 29.122807017543863,
+      "Accuracy_Aceptadas_%": 99.25742574257426,
+      "F1_Aceptadas_%": 99.25577667164272,
+      "Error_Residual_Global_%": 0.5263157894736842
+    },
+    {
+      "Umbral": 0.82,
+      "Cobertura_Aceptada_%": 57.719298245614034,
+      "Tasa_No_Estoy_Seguro_%": 42.280701754385966,
+      "Accuracy_Aceptadas_%": 100.0,
+      "F1_Aceptadas_%": 100.0,
+      "Error_Residual_Global_%": 0.0
+    },
+    {
+      "Umbral": 0.9,
+      "Cobertura_Aceptada_%": 35.26315789473684,
+      "Tasa_No_Estoy_Seguro_%": 64.73684210526315,
+      "Accuracy_Aceptadas_%": 100.0,
+      "F1_Aceptadas_%": 100.0,
+      "Error_Residual_Global_%": 0.0
+    }
+  ],
+  "robustez": [
+    {
+      "Condicion": "1. Condición Ideal (Referencia)",
+      "Accuracy_%": 91.93,
+      "Macro_F1_%": 91.92,
+      "Confianza_Media_%": 78.70999908447266,
+      "Caida_Accuracy_%": 0.0,
+      "Caida_F1_%": 0.0
+    },
+    {
+      "Condicion": "2. Desenfoque Óptico (Gaussian σ=2.3)",
+      "Accuracy_%": 53.68,
+      "Macro_F1_%": 53.41,
+      "Confianza_Media_%": 53.220001220703125,
+      "Caida_Accuracy_%": -38.25,
+      "Caida_F1_%": -38.51
+    },
+    {
+      "Condicion": "3. Poca Luz / Nocturno (Brillo 38%)",
+      "Accuracy_%": 77.19,
+      "Macro_F1_%": 77.49,
+      "Confianza_Media_%": 65.47000122070312,
+      "Caida_Accuracy_%": -14.74,
+      "Caida_F1_%": -14.44
+    },
+    {
+      "Condicion": "4. Oclusión Parcial (Parche 30%)",
+      "Accuracy_%": 83.86,
+      "Macro_F1_%": 83.58,
+      "Confianza_Media_%": 71.37000274658203,
+      "Caida_Accuracy_%": -8.07,
+      "Caida_F1_%": -8.35
+    },
+    {
+      "Condicion": "5. Fondo Alterado / Contraste Extremo",
+      "Accuracy_%": 80.35,
+      "Macro_F1_%": 79.9,
+      "Confianza_Media_%": 67.81999969482422,
+      "Caida_Accuracy_%": -11.58,
+      "Caida_F1_%": -12.03
+    }
+  ],
+  "campo": {
+    "total_fotos": 57,
+    "accuracy_%": 94.74,
+    "confianza_media_%": 82.38,
+    "latencia_media_ms": 14.87,
+    "latencia_p95_ms": 15.45
+  },
+  "errores_gradcam": [
+    {
+      "caso": 1,
+      "real": "Aceites_Quimicos",
+      "pred": "Neumaticos_Gomas",
+      "conf_%": 41.1,
+      "caneca_real": "Roja (RESPEL)",
+      "caneca_pred": "Roja / Posconsumo"
+    },
+    {
+      "caso": 2,
+      "real": "Aceites_Quimicos",
+      "pred": "Pilas_Baterias",
+      "conf_%": 67.6,
+      "caneca_real": "Roja (RESPEL)",
+      "caneca_pred": "Roja (RESPEL)"
+    },
+    {
+      "caso": 3,
+      "real": "Aceites_Quimicos",
+      "pred": "Metal",
+      "conf_%": 32.5,
+      "caneca_real": "Roja (RESPEL)",
+      "caneca_pred": "Blanca (Aprovechable)"
+    },
+    {
+      "caso": 4,
+      "real": "Aceites_Quimicos",
+      "pred": "Glass",
+      "conf_%": 25.9,
+      "caneca_real": "Roja (RESPEL)",
+      "caneca_pred": "Blanca (Aprovechable)"
+    },
+    {
+      "caso": 5,
+      "real": "Bombillas",
+      "pred": "Plastic",
+      "conf_%": 28.4,
+      "caneca_real": "Roja (RESPEL)",
+      "caneca_pred": "Blanca (Aprovechable)"
+    },
+    {
+      "caso": 6,
+      "real": "Bombillas",
+      "pred": "RAEE_Electronicos",
+      "conf_%": 45.2,
+      "caneca_real": "Roja (RESPEL)",
+      "caneca_pred": "Roja / Posconsumo"
+    },
+    {
+      "caso": 7,
+      "real": "Bombillas",
+      "pred": "Neumaticos_Gomas",
+      "conf_%": 52.2,
+      "caneca_real": "Roja (RESPEL)",
+      "caneca_pred": "Roja / Posconsumo"
+    },
+    {
+      "caso": 8,
+      "real": "Cardboard",
+      "pred": "Madera_Procesada",
+      "conf_%": 44.1,
+      "caneca_real": "Blanca (Aprovechable)",
+      "caneca_pred": "Negra / Especial"
+    },
+    {
+      "caso": 9,
+      "real": "Escombros_Ceramica",
+      "pred": "Neumaticos_Gomas",
+      "conf_%": 61.2,
+      "caneca_real": "Especial / Escombrera",
+      "caneca_pred": "Roja / Posconsumo"
+    },
+    {
+      "caso": 10,
+      "real": "Escombros_Ceramica",
+      "pred": "RAEE_Electronicos",
+      "conf_%": 53.6,
+      "caneca_real": "Especial / Escombrera",
+      "caneca_pred": "Roja / Posconsumo"
+    }
+  ]
+}
