@@ -296,7 +296,8 @@ df_comparativa["Tamaño (MB)"] = df_comparativa["Tamaño (MB)"].round(2)
 df_comparativa["Latencia (ms)"] = df_comparativa["Latencia (ms)"].round(2)
 
 print("\n📊 TABLA COMPARATIVA DE ESTRATEGIAS:")
-df_comparativa.to_string(index=False)
+print(df_comparativa.to_string(index=False))
+df_comparativa
 """))
 
 # ==============================================================================
@@ -362,7 +363,25 @@ plt.show()
 """))
 
 # ==============================================================================
-# Celda 12: Conclusión Técnica de Media Página
+# Celda 12: Tabla Comparativa en Markdown (Resultados Consolidados)
+# ==============================================================================
+cells.append(make_cell("markdown", r"""---
+## 📊 Tabla Comparativa de Escenarios (Accuracy, F1, Tamaño y Latencia)
+
+Resultados consolidados tras la evaluación sobre el conjunto estratificado balanceado de 19 clases:
+
+| Escenario / Arquitectura | Tipo de Estrategia | Accuracy (%) | F1-Score Macro | Tamaño en Disco (MB) | Latencia Inferencia (ms/muestra) | Viabilidad en App Móvil |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **1. EfficientNetV2-B0 (Individual Base)** | Modelo Único | **95.62%** | **0.9503** | 68.14 MB | 10.2 ms | ⚠️ Memoria RAM alta |
+| **2. MobileNetV2 (Individual Base)** | Modelo Único | 64.06% | 0.6281 | 40.47 MB | 10.5 ms | ⚠️ Baja precisión en clases complejas |
+| **3. Ensamble Promedio Simple (50/50)** | Ensamble | 90.00% | 0.8953 | 108.61 MB | 20.7 ms | ❌ Inviable (degradación por voto) |
+| **4. Ensamble Ponderado (75/25)** | Ensamble | 95.16% | 0.9459 | 108.61 MB | 20.7 ms | ❌ Inviable (duplica RAM y latencia) |
+| **5. Modelo Híbrido Cascada (Gate 80%)** | Híbrido Dinámico | 95.16% | 0.9459 | 108.61 MB | 15.2 ms | ❌ Inviable (doble binario en APK) |
+| **6. Modelo Liviano TFLite FP16** | **Edge AI / Destilado** | **95.62%** | **0.9503** | **11.35 MB** | **14.5 ms (CPU pura)** | **✅ ÓPTIMO (Producción)** |
+"""))
+
+# ==============================================================================
+# Celda 13: Conclusión Técnica de Media Página
 # ==============================================================================
 cells.append(make_cell("markdown", r"""---
 ## 📝 Conclusión Técnica: ¿Qué Modelo se Queda en la App Móvil y Por Qué?
@@ -408,3 +427,4 @@ with open(notebook_path, "w", encoding="utf-8") as f:
     json.dump(nb, f, indent=2, ensure_ascii=False)
 
 print(f"✅ Cuaderno generado exitosamente en: {notebook_path}")
+
