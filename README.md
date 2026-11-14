@@ -45,7 +45,7 @@ En Colombia, la separación en la fuente bajo la **Resolución 2184 de 2019** pr
   * [S15_Informe_Auditoria_MurilloMoncaleano.pdf](file:///home/jhank/Desktop/ModeloCNN/docs/S15_Informe_Auditoria_MurilloMoncaleano.pdf): Informe de auditoría en formato APA 7 (3 páginas).
   * `figuras_s15/`, `S15_PruebaCampo_MurilloMoncaleano.csv` y `S15_Fotos_PruebaCampo_MurilloMoncaleano.zip`.
 * **[ENTREGABLES_FINALES/](file:///home/jhank/Desktop/ModeloCNN/ENTREGABLES_FINALES/)**:
-  * Carpeta lista para envío con `App_EcoClasificador.apk`, `Pitch_Deck_MurilloMoncaleano.pdf`, `Notebook_Final_MurilloMoncaleano.ipynb` y documentos de auditoría.
+  * Carpeta lista para envío con `App_EcoClasificador.apk` (APK descargable y 100% offline), `Pitch_Deck_MurilloMoncaleano.pdf` (carpeta `pitch/`), `Notebook_Final_MurilloMoncaleano.ipynb` y documentos de auditoría.
 
 ---
 
