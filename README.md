@@ -1,31 +1,72 @@
-# EcoClasificador Móvil - Clasificación de Residuos (19 Clases)
-## Universidad Cooperativa de Colombia (UCC)
-**Estudiante:** Juan Camilo Murillo Moncaleano  
-**Docente:** Ing. Óscar Díaz Triana  
-**Normativa:** Resolución 2184 de 2019 de Colombia (Canecas Blanca, Verde, Negra y Roja)
+# EcoClasificador Móvil (19 Clases) — Clasificación Offline de Residuos
 
-### Estructura de Entregables del Proyecto
+**Curso:** Electiva III (`A_Electiva_III_2620_6089`) — Momento 3 (Entrega Final)  
+**Institución:** Universidad Cooperativa de Colombia (UCC)  
+**Integrante:** Juan Camilo Murillo Moncaleano  
+**Docente:** Ing. Óscar Díaz Triana  
+**Normativa:** Resolución 2184 de 2019 de Colombia (Canecas Blanca, Verde, Negra y Roja/Especial)  
+**Video Pitch (Demo en Vivo):** `[PEGAR_ENLACE_AL_VIDEO_PITCH]`
+
+---
+
+## 1. Problema y Valor Regional
+En Colombia, la separación en la fuente bajo la **Resolución 2184 de 2019** presenta altos errores por desconocimiento ciudadano frente a empaques compuestos (Tetra Pak), textiles y residuos peligrosos/posconsumo (pilas, medicamentos vencidos, bombillas, aceites químicos, RAEE y sanitarios). Además, muchos puntos ecológicos escolares, universitarios y rurales carecen de conectividad estable para depender de APIs en la nube.
+
+**EcoClasificador Móvil** resuelve este problema mediante una aplicación Android **100% offline** (funciona en modo avión) basada en `EfficientNetV2-B0` cuantizada a TensorFlow Lite (`FP16`), que clasifica **19 categorías de residuos** en tiempo real e indica el color exacto de caneca correspondiente.
+
+---
+
+## 2. Métricas Principales del Modelo
+
+| Métrica / Artefacto | Valor Obtenido | Detalle |
+|---|---|---|
+| **Accuracy (3 semillas: 42, 101, 2026)** | **96.77% ± 0.53%** | Evaluación estratificada sobre conjunto de prueba |
+| **F1-Score Macro (3 semillas)** | **96.81% ± 0.51%** | Desempeño balanceado en las 19 categorías |
+| **Accuracy con Umbral ≥ 0.70** | **99.76%** | Acepta el 88.00% de muestras; 12.00% abstención segura (*"No estoy seguro"*) |
+| **Prueba de Campo en la Región (57 fotos)** | **94.74%** (54/57) | Evaluado con intérprete TFLite FP16 en fotos amateurs reales |
+| **Tamaño del Modelo TFLite (FP16)** | **11.35 MB** | `model/modelo_efficientnetv2b0_fp16.tflite` (5,948,771 parámetros) |
+| **Latencia de Inferencia (CPU XNNPACK)** | **14.46 ms / imagen** | Promedio en prueba de campo (~69 FPS teóricos) |
+
+---
+
+## 3. Estructura del Repositorio
 
 * **[notebooks/](file:///home/jhank/Desktop/ModeloCNN/notebooks/)**:
-  * [S15_Auditoria_MurilloMoncaleano.ipynb](file:///home/jhank/Desktop/ModeloCNN/notebooks/S15_Auditoria_MurilloMoncaleano.ipynb): Cuaderno ejecutable y con salidas de la Semana 15 (evaluación con 3 semillas, métricas por clase, matriz de confusión, curvas PR y ROC, umbral de confianza de 0.70, pruebas de robustez, prueba de campo en la región y Grad-CAM de 10 aciertos y 10 errores).
-
+  * [Notebook_Final_MurilloMoncaleano.ipynb](file:///home/jhank/Desktop/ModeloCNN/notebooks/Notebook_Final_MurilloMoncaleano.ipynb): Cuaderno final consolidado y ejecutado (entrenamiento, destilación, conversión a TFLite y evaluación integral).
+  * [S15_Auditoria_MurilloMoncaleano.ipynb](file:///home/jhank/Desktop/ModeloCNN/notebooks/S15_Auditoria_MurilloMoncaleano.ipynb): Auditoría técnica completa de Semana 15 (3 semillas, PR/ROC, umbral 0.70, robustez, campo y Grad-CAM).
+* **[model/](file:///home/jhank/Desktop/ModeloCNN/model/)**:
+  * `modelo_efficientnetv2b0_fp16.tflite` (11.35 MB — modelo principal desplegado en la app).
+  * `modelo_mobilenetv2_dynamic_range.tflite` (2.8 MB — alternativa cuantizada dinámica).
+  * `labels.txt` (19 categorías ordenadas).
+* **[app/](file:///home/jhank/Desktop/ModeloCNN/app/)**:
+  * Código fuente completo de la aplicación móvil en Flutter (`lib/`, `assets/`, `android/`, `pubspec.yaml`).
 * **[docs/](file:///home/jhank/Desktop/ModeloCNN/docs/)**:
-  * [S15_Informe_Auditoria_MurilloMoncaleano.pdf](file:///home/jhank/Desktop/ModeloCNN/docs/S15_Informe_Auditoria_MurilloMoncaleano.pdf): Informe de auditoría en formato Normas APA 7 (3 páginas en PDF).
-  * [S15_PruebaCampo_MurilloMoncaleano.csv](file:///home/jhank/Desktop/ModeloCNN/docs/S15_PruebaCampo_MurilloMoncaleano.csv): Registro de las 57 fotografías de la prueba de campo evaluadas en el modelo móvil TFLite (`archivo, clase_real, prediccion, confianza, tiempo_respuesta_ms`).
-  * [S15_Fotos_PruebaCampo_MurilloMoncaleano.zip](file:///home/jhank/Desktop/ModeloCNN/docs/S15_Fotos_PruebaCampo_MurilloMoncaleano.zip): Archivo comprimido con las 57 fotos de la prueba de campo en la región ([pruebas_campo_region/](file:///home/jhank/Desktop/ModeloCNN/pruebas_campo_region/)).
-
+  * [Pitch_Deck_MurilloMoncaleano.pdf](file:///home/jhank/Desktop/ModeloCNN/docs/Pitch_Deck_MurilloMoncaleano.pdf): Presentación final (10 diapositivas).
+  * [S15_Informe_Auditoria_MurilloMoncaleano.pdf](file:///home/jhank/Desktop/ModeloCNN/docs/S15_Informe_Auditoria_MurilloMoncaleano.pdf): Informe de auditoría en formato APA 7 (3 páginas).
+  * `figuras_s15/`, `S15_PruebaCampo_MurilloMoncaleano.csv` y `S15_Fotos_PruebaCampo_MurilloMoncaleano.zip`.
 * **[ENTREGABLES_FINALES/](file:///home/jhank/Desktop/ModeloCNN/ENTREGABLES_FINALES/)**:
-  * Copia consolidada de los archivos de entrega final (`S15_Auditoria_MurilloMoncaleano.ipynb`, `S15_Informe_Auditoria_MurilloMoncaleano.pdf`, `S15_PruebaCampo_MurilloMoncaleano.csv`, `S15_Fotos_PruebaCampo_MurilloMoncaleano.zip`, `Exposicion_Final_EcoClasificador_92acc.pptx`, `Exposicion_Final_EcoClasificador_92acc.pdf` y `posterElectivaIII.pdf`).
+  * Carpeta lista para envío con `App_EcoClasificador.apk`, `Pitch_Deck_MurilloMoncaleano.pdf`, `Notebook_Final_MurilloMoncaleano.ipynb` y documentos de auditoría.
 
-* **[aplicaciones/](file:///home/jhank/Desktop/ModeloCNN/aplicaciones/)**:
-  * [EcoClasificador_Colombia_Res2184.apk](file:///home/jhank/Desktop/ModeloCNN/aplicaciones/EcoClasificador_Colombia_Res2184.apk): Aplicación móvil Android compilada con el modelo TFLite FP16.
-  * [server.py](file:///home/jhank/Desktop/ModeloCNN/aplicaciones/server.py) e [index.html](file:///home/jhank/Desktop/ModeloCNN/aplicaciones/index.html): Servidor e interfaz web del proyecto.
+---
 
-* **[momento_1_y_2_base/](file:///home/jhank/Desktop/ModeloCNN/momento_1_y_2_base/) y [momento tres/](file:///home/jhank/Desktop/ModeloCNN/momento%20tres/)**:
-  * `1_Pipeline_Dataset_10k_Imagenes.ipynb`: Construcción y balanceo del dataset de 19 clases.
-  * `2_Entrenamiento_Modelo_19Clases.ipynb`: Entrenamiento base inicial.
-  * `3_Defensa_Tecnica_Regularizacion.ipynb`: Regularización L1/L2 y optimizadores.
-  * `4_Optimizacion_Avanzada_EfficientNetV2_90Acc.ipynb` (y `_EJECUTADO.ipynb`): Fine-Tuning con `EfficientNetV2-B0` y Focal Loss.
-  * `5_Comparativa_Ensamble_vs_Modelo_Liviano_Destilado.ipynb`: Comparación entre ensambles (promedio, ponderado, híbrido) y modelo liviano TFLite.
-  * `semana 11/` y `semana 12/`: Transfer Learning comparativo y cuantización a TensorFlow Lite.
-  * `semana 13/flutter_app_residuos/`: Código fuente de la aplicación móvil en Flutter.
+## 4. Cómo Instalar y Ejecutar
+
+### A. Aplicación Móvil Android (APK Offline)
+1. Descargar [ENTREGABLES_FINALES/App_EcoClasificador.apk](file:///home/jhank/Desktop/ModeloCNN/ENTREGABLES_FINALES/App_EcoClasificador.apk).
+2. Instalar en un teléfono Android (habilitar *Instalar aplicaciones de orígenes desconocidos* si el sistema lo solicita).
+3. Abrir **EcoClasificador** (funciona completamente en **Modo Avión**), tomar una fotografía nueva del residuo y observar la categoría predicha, confianza, latencia y caneca recomendada.
+
+### B. Compilar la App desde Código Fuente (Flutter)
+```bash
+cd app
+flutter pub get
+flutter build apk --release
+```
+
+### C. Ejecutar los Cuadernos en Python
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install tensorflow numpy pandas matplotlib seaborn scikit-learn pillow
+jupyter notebook notebooks/Notebook_Final_MurilloMoncaleano.ipynb
+```
