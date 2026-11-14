@@ -129,10 +129,10 @@ class ClassifierService {
     stopwatch.stop();
     final latencyMs = stopwatch.elapsedMilliseconds;
 
-    // 6. Extraer probabilidades, aplicar calibración de dominio y temperatura (T=0.55)
+    // 6. Extraer probabilidades, aplicar calibración mejorada de dominio y temperatura (T=0.55)
     const List<double> priorBoost = [
-      0.72, 0.72, 1.35, 0.88, 1.35, 1.85, 0.78, 0.78, 1.25, 1.75,
-      0.78, 1.40, 0.85, 2.10, 0.78, 0.72, 0.72, 1.70, 1.30
+      0.65, 0.90, 1.25, 1.25, 1.25, 1.65, 1.15, 0.95, 1.20, 1.15,
+      0.95, 1.35, 0.95, 1.95, 1.05, 0.90, 1.45, 1.55, 1.35
     ];
     final List<double> rawScores = List<double>.from(outputTensor[0]);
     final List<double> logProbs = [];

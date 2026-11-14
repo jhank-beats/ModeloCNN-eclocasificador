@@ -1,10 +1,14 @@
 import os
+import io
 import sys
 import json
 import time
 import base64
 import urllib.parse
 import numpy as np
+from PIL import Image
+import torch
+import open_clip
 
 # Silenciar logs verbosos de TensorFlow
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
@@ -286,23 +290,36 @@ CANECAS_COLOMBIA = {
     }
 }
 
-# 3. Carga en Memoria de los Modelos del Ensamble Calibrado (>92% Exactitud)
+# 3. Carga en Memoria del Ensamble Híbrido Multi-Modal (CNN Focal + Base + Calibrador Semántico CLIP)
 path_focal = os.path.join(BASE_DIR, 'modelos', 'modelo_clasificador_19_clases_focal_loss.keras')
 path_base = os.path.join(BASE_DIR, 'modelos', 'modelo_clasificador_19_clases_efficientnetv2b0.keras')
+path_clip_npz = os.path.join(BASE_DIR, 'modelos', 'calibrador_semantico_clip_19c.npz')
 
-print("⏳ Cargando modelos optimizados del Cuaderno 4 en memoria...")
+print("⏳ Cargando modelos optimizados del Ensamble Híbrido en memoria...")
 t0 = time.time()
 model_focal = keras.models.load_model(path_focal, compile=False)
 model_base = keras.models.load_model(path_base, compile=False)
-print(f"✅ Ensamble Calibrado cargado en {time.time() - t0:.2f}s")
+
+torch.set_num_threads(6)
+clip_model, _, clip_preprocess = open_clip.create_model_and_transforms(
+    'ViT-B-32', pretrained='laion2b_s34b_b79k', device='cpu'
+)
+clip_model.eval()
+clip_calib = np.load(path_clip_npz)
+W_TEXT = clip_calib['W_text'].astype(np.float32)
+W_PROBE = clip_calib['W_probe'].astype(np.float32)
+B_PROBE = clip_calib['b_probe'].astype(np.float32)
+print(f"✅ Ensamble Híbrido Calibrado cargado en {time.time() - t0:.2f}s")
 
 # Warmup inicial de GPU/CPU
 dummy = np.random.uniform(0, 255, (1, 180, 180, 3)).astype(np.float32)
 _ = model_focal(dummy, training=False)
 _ = model_base(dummy, training=False)
+with torch.no_grad():
+    _ = clip_model.encode_image(torch.zeros((1, 3, 224, 224)))
 print("⚡ Warmup de inferencia completado")
 
-# 4. Función de inferencia de alta precisión con Multi-Crop TTA y Calibración de Dominio
+# 4. Función de inferencia de alta precisión con Multi-Crop TTA y Calibración Híbrida de Dominio
 PRIOR_BOOST = np.array([
     0.58, # 0: Aceites_Quimicos
     0.68, # 1: Bombillas
@@ -325,17 +342,40 @@ PRIOR_BOOST = np.array([
     1.30, # 18: Vegetation
 ], dtype=np.float32)
 
+HYBRID_PRIOR_BOOST = np.array([
+    0.75, # 0: Aceites_Quimicos (evitar falsos positivos en envases plásticos/vidrio)
+    1.00, # 1: Bombillas
+    1.10, # 2: Cardboard
+    1.30, # 3: Escombros_Ceramica
+    1.10, # 4: Food_Organics
+    1.15, # 5: Glass
+    1.05, # 6: Madera_Procesada
+    1.00, # 7: Medicamentos
+    1.10, # 8: Metal
+    0.82, # 9: Miscellaneous_Trash (evitar absorber Tetra_Pack y Paper)
+    1.10, # 10: Neumaticos_Gomas
+    1.30, # 11: Paper
+    1.00, # 12: Pilas_Baterias
+    1.35, # 13: Plastic
+    1.05, # 14: RAEE_Electronicos
+    0.95, # 15: Residuos_Sanitarios
+    1.50, # 16: Tetra_Pack
+    1.10, # 17: Textile_Trash
+    1.30, # 18: Vegetation
+], dtype=np.float32)
+
+def _softmax_np(logits):
+    e = np.exp(logits - np.max(logits, axis=-1, keepdims=True))
+    return e / np.sum(e, axis=-1, keepdims=True)
+
 def clasificar_imagen_bytes(img_bytes, usar_tta=True, temp=0.55):
     inicio = time.time()
     
-    # Decodificar imagen
+    # 1. Inferencia CNN (Focal + EfficientNetV2-B0) con Multi-Crop TTA
     img_raw = tf.cast(tf.io.decode_image(img_bytes, channels=3, expand_animations=False), tf.float32)
     img_orig = tf.image.resize(img_raw, (180, 180))
 
     if usar_tta:
-        # Vista 1: Imagen completa 180x180 (45%)
-        # Vista 2: Espejo horizontal (25%)
-        # Vista 3: Recorte central al 80% enfocando textura del material y reduciendo fondo (30%)
         img_fliph = tf.image.flip_left_right(img_orig)
         img_crop = tf.image.resize(tf.image.central_crop(img_raw, 0.80), (180, 180))
         batch_tta = tf.stack([img_orig, img_fliph, img_crop], axis=0)
@@ -351,13 +391,35 @@ def clasificar_imagen_bytes(img_bytes, usar_tta=True, temp=0.55):
         p_focal = model_focal(x_orig, training=False).numpy()
         p_base = model_base(x_orig, training=False).numpy()
 
-    # Fusión ponderada del ensamble: 80% Focal + 20% Base con corrección de prior de dominio
-    p_ensamble = ((0.80 * p_focal) + (0.20 * p_base)) * PRIOR_BOOST[None, :]
+    p_cnn = ((0.80 * p_focal) + (0.20 * p_base)) * PRIOR_BOOST[None, :]
+    p_cnn = p_cnn / np.sum(p_cnn, axis=-1, keepdims=True)
+
+    # 2. Inferencia Semántica y Lineal (Multi-Crop ViT-B/32)
+    pil_img = Image.open(io.BytesIO(img_bytes)).convert('RGB')
+    w, h = pil_img.size
+    with torch.no_grad():
+        if usar_tta and w > 64 and h > 64:
+            pil_crop = pil_img.crop((int(w * 0.10), int(h * 0.10), int(w * 0.90), int(h * 0.90)))
+            clip_in = torch.stack([clip_preprocess(pil_img), clip_preprocess(pil_crop)], dim=0)
+            feat = clip_model.encode_image(clip_in)
+            feat = feat / feat.norm(dim=-1, keepdim=True)
+            feat = (0.65 * feat[0:1] + 0.35 * feat[1:2])
+            feat = (feat / feat.norm(dim=-1, keepdim=True)).numpy()
+        else:
+            clip_in = clip_preprocess(pil_img).unsqueeze(0)
+            feat = clip_model.encode_image(clip_in)
+            feat = (feat / feat.norm(dim=-1, keepdim=True)).numpy()
+
+    p_text = _softmax_np((feat @ W_TEXT.T) * 40.0)
+    p_probe = _softmax_np((feat @ W_PROBE.T) + B_PROBE[None, :])
+
+    # 3. Fusión Híbrida de 3 Vías + Corrección de Prior de Dominio
+    p_ensamble = ((0.50 * p_text) + (0.30 * p_probe) + (0.20 * p_cnn)) * HYBRID_PRIOR_BOOST[None, :]
     p_ensamble = p_ensamble / np.sum(p_ensamble, axis=-1, keepdims=True)
 
     # Calibración de temperatura (Temperature Scaling, Guo et al. 2017)
     eps = 1e-7
-    t_val = min(0.55, max(0.25, float(temp)))
+    t_val = min(0.45, max(0.25, float(temp) * 0.55))
     log_p = np.log(np.clip(p_ensamble, eps, 1.0 - eps)) / t_val
     exp_p = np.exp(log_p - np.max(log_p))
     probs = (exp_p / np.sum(exp_p))[0]
