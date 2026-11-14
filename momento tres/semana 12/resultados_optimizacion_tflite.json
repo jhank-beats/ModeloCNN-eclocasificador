@@ -1,0 +1,113 @@
+{
+  "tuner_trials": [
+    {
+      "trial_id": 1,
+      "dense_units": 128,
+      "dropout_rate": 0.2,
+      "learning_rate": 0.001,
+      "val_accuracy": 0.895,
+      "val_loss": 0.392
+    },
+    {
+      "trial_id": 2,
+      "dense_units": 256,
+      "dropout_rate": 0.3,
+      "learning_rate": 0.0005,
+      "val_accuracy": 0.928,
+      "val_loss": 0.269
+    },
+    {
+      "trial_id": 3,
+      "dense_units": 512,
+      "dropout_rate": 0.4,
+      "learning_rate": 0.0001,
+      "val_accuracy": 0.912,
+      "val_loss": 0.315
+    },
+    {
+      "trial_id": 4,
+      "dense_units": 256,
+      "dropout_rate": 0.5,
+      "learning_rate": 0.002,
+      "val_accuracy": 0.884,
+      "val_loss": 0.428
+    },
+    {
+      "trial_id": 5,
+      "dense_units": 128,
+      "dropout_rate": 0.3,
+      "learning_rate": 0.0005,
+      "val_accuracy": 0.908,
+      "val_loss": 0.334
+    },
+    {
+      "trial_id": 6,
+      "dense_units": 512,
+      "dropout_rate": 0.2,
+      "learning_rate": 0.001,
+      "val_accuracy": 0.919,
+      "val_loss": 0.298
+    },
+    {
+      "trial_id": 7,
+      "dense_units": 256,
+      "dropout_rate": 0.2,
+      "learning_rate": 0.0001,
+      "val_accuracy": 0.915,
+      "val_loss": 0.308
+    },
+    {
+      "trial_id": 8,
+      "dense_units": 128,
+      "dropout_rate": 0.4,
+      "learning_rate": 0.002,
+      "val_accuracy": 0.879,
+      "val_loss": 0.441
+    },
+    {
+      "trial_id": 9,
+      "dense_units": 512,
+      "dropout_rate": 0.3,
+      "learning_rate": 0.0005,
+      "val_accuracy": 0.923,
+      "val_loss": 0.282
+    },
+    {
+      "trial_id": 10,
+      "dense_units": 256,
+      "dropout_rate": 0.4,
+      "learning_rate": 0.001,
+      "val_accuracy": 0.906,
+      "val_loss": 0.342
+    }
+  ],
+  "best_hyperparameters": {
+    "dense_units": 256,
+    "dropout_rate": 0.3,
+    "learning_rate": 0.0005,
+    "optimizer": "Adam"
+  },
+  "tflite_benchmark": [
+    {
+      "version": "Float32 (Baseline)",
+      "size_mb": 14.1,
+      "test_accuracy": 0.9245,
+      "latency_ms": 26.4,
+      "fps": 37.9
+    },
+    {
+      "version": "Dynamic Range (Post-Training)",
+      "size_mb": 3.82,
+      "test_accuracy": 0.9218,
+      "latency_ms": 12.8,
+      "fps": 78.1
+    },
+    {
+      "version": "INT8 Completo (Cuantizaci\u00f3n Total)",
+      "size_mb": 3.65,
+      "test_accuracy": 0.9152,
+      "latency_ms": 8.5,
+      "fps": 117.6
+    }
+  ]
+}
