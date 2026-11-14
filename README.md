@@ -15,7 +15,7 @@
   * [S15_Fotos_PruebaCampo_MurilloMoncaleano.zip](file:///home/jhank/Desktop/ModeloCNN/docs/S15_Fotos_PruebaCampo_MurilloMoncaleano.zip): Archivo comprimido con las 57 fotos de la prueba de campo en la región ([pruebas_campo_region/](file:///home/jhank/Desktop/ModeloCNN/pruebas_campo_region/)).
 
 * **[ENTREGABLES_FINALES/](file:///home/jhank/Desktop/ModeloCNN/ENTREGABLES_FINALES/)**:
-  * Copia consolidada de los archivos de entrega final (`S15_Auditoria_MurilloMoncaleano.ipynb`, `S15_Informe_Auditoria_MurilloMoncaleano.pdf`, `S15_PruebaCampo_MurilloMoncaleano.csv`, `S15_Fotos_PruebaCampo_MurilloMoncaleano.zip`, `Exposicion_Final_EcoClasificador_92acc.pptx`, `Exposicion_Final_EcoClasificador_92acc.pdf` y `posterElectivaIII.pdf`).
+  * Copia consolidada de los archivos de entrega final (`S15_Auditoria_MurilloMoncaleano.ipynb`, `S15_Informe_Auditoria_MurilloMoncaleano.pdf`, `S15_PruebaCampo_MurilloMoncaleano.csv`, `S15_Fotos_PruebaCampo_MurilloMoncaleano.zip`, `Exposicion_Final_EcoClasificador_92acc.pptx`, `Exposicion_Final_EcoClasificador_92acc.pdf` y `posterElectivaIII.pdf`). También en esta carpeta quedó el apk descargable y offline
 
 * **[aplicaciones/](file:///home/jhank/Desktop/ModeloCNN/aplicaciones/)**:
   * [EcoClasificador_Colombia_Res2184.apk](file:///home/jhank/Desktop/ModeloCNN/aplicaciones/EcoClasificador_Colombia_Res2184.apk): Aplicación móvil Android compilada con el modelo TFLite FP16.
