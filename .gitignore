@@ -12,5 +12,6 @@ momento_1_y_2_base/resultados_optimizacion_90/*.h5
 **/.dart_tool/
 **/.gradle/
 *.apk
+!ENTREGABLES_FINALES/*.apk
 *.keras
 *.h5
